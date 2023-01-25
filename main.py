@@ -38,23 +38,20 @@ def login():
         password = request.form.get('password')
         secret_password = hash_password(password)
 
-        for username, secret_password in get_users():
-            if username == get_users().keys():
-                print("username exist")
-                if secret_password == get_users().values():
-                    print("success")
-                    return redirect(url_for('dashboard'))
-
+        for key, value in get_users().items():
+            if key != username:
+                return "This user does not exist"
+            elif key == username and value != secret_password:
+                return redirect(url_for('login', error=True))
             else:
-                raise "username is wrong"
+                return render_template("dashboard.html", title="dashboard")
 
-    return render_template("login.html", title="Log in", user_name=username)
+    return render_template("login.html", title="Log in")
 
 
 @app.route("/dashboard")
 def dashboard():
     return render_template("dashboard.html", title="Dashboard")
-    pass
 
 
 @app.route("/logout", methods=["GET", "POST"])
