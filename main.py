@@ -38,7 +38,7 @@ def login():
         password = request.form.get('password')
         secret_password = hash_password(password)
 
-        for username in get_users():
+        for username, secret_password in get_users():
             if username == get_users().keys():
                 print("username exist")
                 if secret_password == get_users().values():
@@ -48,19 +48,23 @@ def login():
             else:
                 raise "username is wrong"
 
-    return render_template("login.html", title="Log in")
+    return render_template("login.html", title="Log in", user_name=username)
 
 
 @app.route("/dashboard")
 def dashboard():
-    # YOUR SOLUTION HERE
+    return render_template("dashboard.html", title="Dashboard")
     pass
 
 
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
-    # YOUR SOLUTION HERE
-    pass
+    session.pop('username')
+    return redirect(url_for('index'))
+
+
+def sign_out():
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
