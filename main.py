@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, redirect, render_template, request, session, url_for
 from helpers import get_users, hash_password
+from flask_login import login_required
 
 __winc_id__ = "8fd255f5fe5e40dcb1995184eaa26116"
 __human_name__ = "authentication"
@@ -40,16 +41,17 @@ def login():
 
         for key, value in get_users().items():
             if key != username:
-                return "This user does not exist"
+                return render_template("login.html", title="Log in Error", error_email=True)
             elif key == username and value != secret_password:
-                return redirect(url_for('login', error=True))
+                return render_template("login.html", title="Log in Error", error=True)
             else:
-                return render_template("dashboard.html", title="dashboard")
+                return render_template("dashboard.html", title="dashboard", user=username)
 
     return render_template("login.html", title="Log in")
 
 
 @app.route("/dashboard")
+@login_required
 def dashboard():
     return render_template("dashboard.html", title="Dashboard")
 

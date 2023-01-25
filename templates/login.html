@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <!-- Your error message logic and HTML here. -->
+{% if error_email == True %}
+<h3 class="error">This user does not exist!</h3>
+{% endif %}
+
 {% if error == True %}
-<h3 class="error">Password is incorrect</h3>
+<h3 class="error">Password is not incorrect</h3>
 {% endif %}
 
 <form method="post">
