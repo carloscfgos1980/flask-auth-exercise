@@ -39,20 +39,17 @@ def login():
         password = request.form.get('password')
         secret_password = hash_password(password)
 
-        for key in get_users().keys():
-            if key == username:
-                print("user nam is:", key)
-                for value in get_users().values():
-                    if value == secret_password:
-                        print("user password:", value)
-                        session['username'] = request.form['username']
-                        return render_template("dashboard.html", title="dashboard", user=key)
-                    else:
-                        print("wrong password")
-                        return render_template("login.html", title="Log in Error", error=True)
+        if username in get_users().keys():
+            if secret_password in get_users().values():
+                print("correct password:")
+                session['username'] = request.form['username']
+                return render_template("dashboard.html", title="dashboard", user=username)
             else:
-                print("wrong user", key)
-                return render_template("login.html", title="Log in Error", error_email=True)
+                print("wrong password")
+                return render_template("login.html", title="Password Error", error=True)
+        else:
+            print("wrong user", username)
+            return render_template("login.html", title="User Error", error_user=True)
 
     return render_template("login.html", title="Log in")
 
